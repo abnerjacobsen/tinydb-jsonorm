@@ -1,0 +1,16 @@
+[paths]
+source =
+   src/tinydb_jsonorm
+   */site-packages/tinydb_jsonorm
+
+[run]
+branch = True
+source =
+    tinydb_jsonorm
+    tests
+parallel = true
+
+[report]
+show_missing = true
+precision = 2
+omit = *migrations*
