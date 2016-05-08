@@ -63,14 +63,13 @@ class Database(object):
     """
 
     #def __init__(self, *args, **kwargs):
-    def __init__(self, db='nonedb.js'):
+    def __init__(self, db='nonedb.json'):
 
         # Storage and serialization
         serializer = SerializationMiddleware(tinydb.storages.JSONStorage)
         serializer.register_serializer(DateTimeSerializer(), 'TinyDateTime')
 
         # A reference to the actual database object.
-        #self._conn = tinydb.TinyDB(*args, **kwargs)
         self._conn = tinydb.TinyDB(db, storage=serializer)
 
         # Activat SmartCache
@@ -91,3 +90,6 @@ class Database(object):
             self.__class__.__name__,
             self._conn._storage.__class__.__name__,
         )
+
+
+

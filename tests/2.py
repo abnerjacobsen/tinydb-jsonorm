@@ -55,23 +55,25 @@ def main():
     model.key = "test"
     model.created_at = datetime.utcnow()
 
-    # Set tatble where insert record, if no set the record is saved in default table of Tinydb
-    table = dbj.table(model.__tablename__)
-
     # Insert/save the new record
-    model.insert()
+    newrecid = model.insert()
+
+    # Set table object where perform query, if no set the record is saved in default table of Tinydb
+    table = dbj.table(model.__tablename__, cache_size=None)
 
     # Query all records in table
     allrec = table.all()
     qList = []
     qlist = [ConfigModel(eid=row.eid, **row) for row in allrec]
-    for rec in qlist:
-        print("Rec: ", rec.id, rec.key, rec.name)
+    print("\nRecords in database: %d" % len(qlist))
+    #for rec in qlist:
+    #    print("Rec: ", rec.id, rec.key, rec.name)
 
-    # tinydbj - create model from table's data
+    # tinydbj - create model from table's record
     row = table.get(dbj.where("key") == "test")
     new_model = ConfigModel(eid=row.eid, **row)
 
+    print("\nLast inserted record")
     print(new_model.id)
     print(new_model.name)
     print(new_model.key)
@@ -81,6 +83,7 @@ def main():
     print(new_model.created_at_datetime())
 
     # Change/update record
+    print("\nChanging last insert record key field")
     new_model.key = 'dev'
     new_model.save()
     print(new_model.id)
@@ -91,7 +94,21 @@ def main():
     print(new_model.location)
     print(new_model.created_at_datetime())
 
-    
+    # Create record to be deleted
+    delrec = ConfigModel(name="nooriginal", key="tobedeleted", created_at=datetime.utcnow())
+    delrecid = delrec.insert()
+
+
+    # Delete record using table object using id
+    print("\nDeleting record: %d" % delrecid)
+    rectodel = ConfigModel.get(eid=delrecid)
+    #rectodel = ConfigModel.get(dbj.where("key") == "tobedeleted")
+    print("Created rec: ", model.id, model.key, model.name)
+    print("To Delete: ", rectodel.id, rectodel.key, rectodel.name)
+    rectodel.delete()
+
+    #drec = ConfigModel(eid=row.eid, **row)
+    #print("Rec: ", drec.id, drec.key, drec.name)
 
 if __name__ == "__main__":
     main()

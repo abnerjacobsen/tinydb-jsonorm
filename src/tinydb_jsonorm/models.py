@@ -35,17 +35,46 @@ class Model(jsonmodels.models.Base):
 class TinyJsonModel(Model):
     __tablename__ = "TinyjModel"
 
-    def __init__(self, eid=0, *args, **kwargs):
-        self.eid = eid
+    def __init__(self, eid=None, *args, **kwargs):
+        if eid is not None:
+            self.eid = eid
         super(TinyJsonModel, self).__init__(*args, **kwargs)
 
     @property
     def id(self):
         return self.eid
 
+    @classmethod
+    def get(cls, cond=None, eid=None):
+        table = cls.Meta.database.table(cls.__tablename__)
+        if eid is not None:
+            row = table.get(eid=eid)
+        else:
+            row = table.get(cond=cond)
+
+        if row is not None:
+            return cls(eid=row.eid, **row)
+        else:
+            raise ValueError('Record not exist')
+
+
+    def delete(self):
+        deletedeid = None
+        if self.eid > 0:
+            table = self.Meta.database.table(self.__tablename__)
+            deletedeid = table.remove(eids=[self.eid])
+        else:
+            raise ValueError('Record without eid set')
+        return deletedeid
+
     def save(self):
-        table = self.Meta.database.table(self.__tablename__)
-        table.update(self.to_struct(), eids=[self.eid])
+        savedeid = None
+        if self.eid > 0:
+            table = self.Meta.database.table(self.__tablename__)
+            savedeid = table.update(self.to_struct(), eids=[self.eid])
+        else:
+            raise ValueError('Record without eid set')
+        return savedeid
 
     def insert(self):
         table = self.Meta.database.table(self.__tablename__)
