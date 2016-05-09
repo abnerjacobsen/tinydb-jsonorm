@@ -7,6 +7,6 @@ __version__ = "0.1.0"
 
 from .db import Database  # noqa
 from .models import TinyJsonModel  # noqa
-from jsonmodels import fields # Proxy to jsonmodels fields objects
+from jsonmodels import fields  # Proxy to jsonmodels fields objects
 
 

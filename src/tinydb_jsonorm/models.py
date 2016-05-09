@@ -5,7 +5,10 @@ from __future__ import unicode_literals
 
 import jsonmodels.models
 from six import add_metaclass
+from .cuid import CuidGenerator
+from jsonmodels import fields 
 
+uuidgen = CuidGenerator()
 
 class TablenameMeta(type):
     """Adds ``__tablename__`` attribute to a class.
@@ -35,20 +38,33 @@ class Model(jsonmodels.models.Base):
 class TinyJsonModel(Model):
     __tablename__ = "TinyjModel"
 
+    # Defailt fields for every model
+    _cuid = fields.StringField()
+
     def __init__(self, eid=None, *args, **kwargs):
+        # When eid is informed we consider as existent record in the database
         if eid is not None:
             self.eid = eid
+        else:
+            # Only generate cuid for new record objects eid == None
+            self._cuid = uuidgen.cuid()
         super(TinyJsonModel, self).__init__(*args, **kwargs)
 
     @property
     def id(self):
-        return self.eid
+        if hasattr(self, 'eid'):
+            return self.eid
+        else:
+            return 0
 
     @classmethod
-    def get(cls, cond=None, eid=None):
+    def get(cls, cond=None, eid=None, cuid=None):
         table = cls.Meta.database.table(cls.__tablename__)
         if eid is not None:
             row = table.get(eid=eid)
+        elif cuid is not None:
+            lcond = cls.Meta.database.where("_cuid") == cuid
+            row = table.get(cond=lcond)
         else:
             row = table.get(cond=cond)
 
