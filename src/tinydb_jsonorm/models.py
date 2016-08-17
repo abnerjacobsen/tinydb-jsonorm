@@ -73,6 +73,13 @@ class TinyJsonModel(Model):
         else:
             raise ValueError('Record not exist')
 
+    @classmethod
+    def all(cls):
+        table = cls.Meta.database.table(cls.__tablename__)
+        allrec = table.all()
+        qList = []
+        qlist = [cls(eid=row.eid, **row) for row in allrec]
+        return qlist
 
     def delete(self):
         deletedeid = None
