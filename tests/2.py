@@ -5,10 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
-import time
 from datetime import datetime
-from pprint import pprint
 
 from tinydb_jsonorm import Database
 from tinydb_jsonorm import TinyJsonModel
@@ -45,7 +42,7 @@ def main():
             self.last_update = datetime.utcnow()
             self.created_at = self.last_update
             super(ConfigModel, self).__init__(*args, **kwargs)
-            
+
         # this attribute wont be saved because it's not a field
         address = "this attribute will not be saved"
 
@@ -60,7 +57,7 @@ def main():
         class Meta:
             database = dbj
 
-    
+
     # Create new record
     model = ConfigModel()
     model.name = "original"
@@ -79,7 +76,7 @@ def main():
 
     # Query all records in table
     allrec = table.all()
-    qList = []
+    qlist = []
     qlist = [ConfigModel(eid=row.eid, **row) for row in allrec]
     print("\nRecords in database: %d" % len(qlist))
     #for rec in qlist:

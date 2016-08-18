@@ -6,10 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
-import time
 from datetime import datetime
-from pprint import pprint
-import json
 
 from tinydb_jsonorm import Database
 from tinydb_jsonorm import TinyJsonModel
@@ -74,7 +71,7 @@ def main():
             self._last_update = datetime.utcnow()
             self._created_at = self._last_update
             super(ConfigModel, self).__init__(*args, **kwargs)
-            
+
         # Example model custom method
         def created_at_datetime(self):
             return self._created_at
@@ -86,7 +83,7 @@ def main():
         class Meta:
             database = dbj
 
-    
+
     # Create new record for dev config
     devcfg = ConfigModel(
         ENV = 'dev',
@@ -112,7 +109,7 @@ def main():
         WTF_CSRF_ENABLED = False,
         TESTING = False,
         AUTH_ENGINES = [
-            AuthType(provider='Local'), 
+            AuthType(provider='Local'),
             AuthType(provider='Daspanel')
         ],
         FLASK_DEBUG_DISABLE_STRICT = True,
@@ -126,7 +123,7 @@ def main():
     # Insert/save the new record
     devcfgid = devcfg.insert()
     devcfgcuid = devcfg._cuid
-    #print("\nDevcfg: ", devcfg.id, devcfg._cuid, devcfg.ENV, devcfg.AUTH_ENGINES)
+    print("\nDevcfg: ", devcfgid, devcfg.id, devcfgcuid, devcfg._cuid, devcfg.ENV, devcfg.AUTH_ENGINES)
 
 
     # Create new record for staging config
@@ -151,11 +148,10 @@ def main():
     stgcfg.TESTING = False
     stgcfg.AUTH_ENGINES = [AuthType(provider='Getuuid'), AuthType(provider='Local')]
     stgcfg.FLASK_DEBUG_DISABLE_STRICT = True
-    
+
     stgcfg.validate()
     stgcfgid = stgcfg.insert()
-    stgcfgcuid = stgcfg._cuid
-    #print("Stgcfg: ", stgcfg.id, stgcfg._cuid, stgcfg.ENV, stgcfg.AUTH_ENGINES)
+    print("Stgcfg: ", stgcfgid, stgcfg.id, stgcfg._cuid, stgcfg.ENV, stgcfg.AUTH_ENGINES)
 
     # Create new record for production config
     prodcfg = ConfigModel()
@@ -179,11 +175,11 @@ def main():
     prodcfg.TESTING = False
     prodcfg.AUTH_ENGINES = [AuthType(provider='Getuuid'), AuthType(provider='Daspanel')]
     prodcfg.FLASK_DEBUG_DISABLE_STRICT = True
-    
+
     prodcfg.validate()
     prodcfgid = prodcfg.insert()
     prodcfgcuid = prodcfg._cuid
-    #print("Prodcfg: ", prodcfg.id, prodcfg._cuid, prodcfg.ENV, prodcfg.AUTH_ENGINES, "\n")
+    print("Prodcfg: ", prodcfgid, prodcfg.id, prodcfgcuid, prodcfg._cuid, prodcfg.ENV, prodcfg.AUTH_ENGINES, "\n")
 
     # Get Config record
     myconfig = ConfigModel.get(dbj.where("ENV") == "prod").to_struct()
@@ -194,7 +190,7 @@ def main():
     app.run(debug=True, port=8000, host='0.0.0.0')
 
 
-    
+
 if __name__ == "__main__":
     main()
 

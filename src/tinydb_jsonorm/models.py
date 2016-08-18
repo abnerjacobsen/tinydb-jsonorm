@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import jsonmodels.models
 from six import add_metaclass
 from .cuid import CuidGenerator
-from jsonmodels import fields 
+from jsonmodels import fields
 
 uuidgen = CuidGenerator()
 
@@ -77,7 +77,7 @@ class TinyJsonModel(Model):
     def all(cls):
         table = cls.Meta.database.table(cls.__tablename__)
         allrec = table.all()
-        qList = []
+        qlist = []
         qlist = [cls(eid=row.eid, **row) for row in allrec]
         return qlist
 
@@ -107,7 +107,7 @@ class TinyJsonModel(Model):
             return self.eid
         else:
             raise ValueError('Failed to get eid for the new insert record')
-            
+
 
 
 

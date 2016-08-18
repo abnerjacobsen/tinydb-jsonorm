@@ -5,10 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
-import time
 from datetime import datetime
-from pprint import pprint
 
 from tinydb import TinyDB
 from tinydb.storages import JSONStorage
@@ -87,7 +84,7 @@ def main():
 
         name = fields.StringField()
         key = fields.StringField()
-            
+
         # this attribute wont be saved because it's not a field
         address = "this attribute will not be saved"
 
@@ -109,7 +106,7 @@ def main():
     model.insert()
 
     allrec = table.all()
-    qList = []
+    qlist = []
     qlist = [ConfigModel(eid=row.eid, **row) for row in allrec]
     for rec in qlist:
         print("Rec: ", rec.id, rec.key, rec.name)
@@ -136,7 +133,7 @@ def main():
     print(new_model.location)
     print(new_model.created_at_datetime())
 
-    
+
 
 if __name__ == "__main__":
     main()

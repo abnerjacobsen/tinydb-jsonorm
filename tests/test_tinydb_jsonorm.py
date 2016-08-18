@@ -5,11 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
-import time
-import tempfile
 from datetime import datetime
-from pprint import pprint
 
 from tinydb_jsonorm import Database
 from tinydb_jsonorm import TinyJsonModel
@@ -23,7 +19,7 @@ def test_main():
     assert Database
     assert TinyJsonModel
     assert fields
-    
+
     # Our database
     dbpath = 'tinyjdb-%s.json' % datetime.now().strftime("%y%m%d_%H%M%S")
     table1 = 'config'
