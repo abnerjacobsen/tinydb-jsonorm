@@ -70,6 +70,7 @@ def main():
     # Insert/save the new record
     newrecid = model.insert()
     newreccuid = model._cuid
+    print(newrecid, newreccuid)
 
     # Set table object where perform query, if no set the record is saved in default table of Tinydb
     table = dbj.table(model.__tablename__, cache_size=None)
