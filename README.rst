@@ -40,7 +40,7 @@ Overview
     :target: https://landscape.io/github/abnerjacobsen/tinydb-jsonorm/master
     :alt: Code Quality Status
 
-.. |codacy| image:: https://img.shields.io/codacy/REPLACE_WITH_PROJECT_ID.svg?style=flat
+.. |codacy| image:: https://img.shields.io/codacy/82865c7a11ab4336815de7915178c486.svg?style=flat
     :target: https://www.codacy.com/app/abnerjacobsen/tinydb-jsonorm
     :alt: Codacy Code Quality Status
 
