@@ -42,13 +42,13 @@ class TinyJsonModel(Model):
     _cuid = fields.StringField()
 
     def __init__(self, eid=None, *args, **kwargs):
+        super(TinyJsonModel, self).__init__(*args, **kwargs)
         # When eid is informed we consider as existent record in the database
         if eid is not None:
             self.eid = eid
         else:
             # Only generate cuid for new record objects eid == None
             self._cuid = uuidgen.cuid()
-        super(TinyJsonModel, self).__init__(*args, **kwargs)
 
     @property
     def id(self):
