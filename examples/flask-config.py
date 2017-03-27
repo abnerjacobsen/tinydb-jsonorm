@@ -68,9 +68,9 @@ def main():
         _created_at = fields.DateTimeField(required=True)
 
         def __init__(self, *args, **kwargs):
+            super(ConfigModel, self).__init__(*args, **kwargs)
             self._last_update = datetime.utcnow()
             self._created_at = self._last_update
-            super(ConfigModel, self).__init__(*args, **kwargs)
 
         # Example model custom method
         def created_at_datetime(self):
