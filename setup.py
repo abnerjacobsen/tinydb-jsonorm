@@ -24,7 +24,7 @@ def read(*names, **kwargs):
 
 setup(
     name='tinydb-jsonorm',
-    version='0.1.0',
+    version='0.2.0',
     license='BSD',
     description='A library based on jsonmodels that adds some ORM features and another few conveniences to TinyDB with Json storage and tinydb-smartcache enabled.',
     long_description='%s\n%s' % (
