@@ -39,9 +39,10 @@ def main():
         created_at = fields.DateTimeField(required=True)
 
         def __init__(self, *args, **kwargs):
+            super(ConfigModel, self).__init__(*args, **kwargs)
             self.last_update = datetime.utcnow()
             self.created_at = self.last_update
-            super(ConfigModel, self).__init__(*args, **kwargs)
+            #super(ConfigModel, self).__init__(*args, **kwargs)
 
         # this attribute wont be saved because it's not a field
         address = "this attribute will not be saved"
