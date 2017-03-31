@@ -11,7 +11,7 @@ from tinydb_jsonorm import Database
 from tinydb_jsonorm import TinyJsonModel
 from tinydb_jsonorm import fields
 
-from jsonmodels import models
+from jsonmodels import models, validators
 
 # Hard coded jsonmodels datastores
 class CacheType(models.Base):
@@ -21,6 +21,10 @@ class CacheType(models.Base):
 # Initialize some default list options
 cache_simple = CacheType(name='simple')
 cache_memc = CacheType(name='memcached')
+
+class Version(TinyJsonModel):
+    __tablename__ = "versions"
+    tag = fields.StringField(required=True, validators=[validators.Length(1, 255)])
 
 def main():
     # Our database
@@ -35,6 +39,8 @@ def main():
         name = fields.StringField()
         key = fields.StringField()
         CACHE_TYPE = fields.ListField([CacheType])
+        versions = fields.ListField(['Version'])
+        active_version = fields.StringField(required=True, validators=[validators.Length(25, 25)])
         last_update = fields.DateTimeField(required=True)
         created_at = fields.DateTimeField(required=True)
 
@@ -64,13 +70,24 @@ def main():
     model.name = "original"
     model.key = "test"
     model.CACHE_TYPE = [cache_simple, cache_memc]
+    newver = Version()
+    newver.tag = '0.1.0'
+    newver.validate()
+    model.versions.append(newver)
+    print("NEWVER ID: ", newver._cuid)
+    model.active_version = newver._cuid
     model.created_at = datetime.utcnow()
+    print("1-Version ID: ", model.versions[0]._cuid)
+    print("1-Active Version: ", model.active_version)
     model.validate()
 
     print(model.id, model._cuid)
     # Insert/save the new record
     newrecid = model.insert()
     newreccuid = model._cuid
+    print("2-Version ID: ", model.versions[0]._cuid)
+    print("2-Active Version: ", model.active_version)
+
     print(newrecid, newreccuid)
 
     # Set table object where perform query, if no set the record is saved in default table of Tinydb
@@ -96,6 +113,7 @@ def main():
     print(new_model.created_at)
     print(new_model.address)
     print(new_model.location)
+    print(new_model.active_version)
     print(new_model.created_at_datetime())
 
     # Change/update record
@@ -109,10 +127,16 @@ def main():
     print(new_model.created_at)
     print(new_model.address)
     print(new_model.location)
+    print(new_model.active_version)
     print(new_model.created_at_datetime())
 
     # Create record to be deleted
-    delrec = ConfigModel(name="nooriginal", key="tobedeleted", created_at=datetime.utcnow())
+    delrec = ConfigModel(
+        name="nooriginal", 
+        key="tobedeleted", 
+        versions = [newver],
+        active_version = newver._cuid,
+        created_at=datetime.utcnow())
     delrecid = delrec.insert()
     delreccuid = delrec._cuid
 
