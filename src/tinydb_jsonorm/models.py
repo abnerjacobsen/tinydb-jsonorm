@@ -43,12 +43,16 @@ class TinyJsonModel(Model):
 
     def __init__(self, eid=None, *args, **kwargs):
         super(TinyJsonModel, self).__init__(*args, **kwargs)
+
         # When eid is informed we consider as existent record in the database
         if eid is not None:
             self.eid = eid
         else:
-            # Only generate cuid for new record objects eid == None
-            self._cuid = uuidgen.cuid()
+            if '_cuid' in kwargs:
+                self._cuid = kwargs['_cuid']
+            else:
+                # Only generate cuid for new record objects eid == None and kwargs['_cuid'] == None
+                self._cuid = uuidgen.cuid()
 
     @property
     def id(self):
